@@ -38,24 +38,13 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+    public ResponseEntity<?> jwtSignInUser(@Valid @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(jwtSignInUser(loginRequest.getEmail(), loginRequest.getPassword()));
     }
 
     @PostMapping("/signup_step_one")
     public ResponseEntity<?> signUpUserStepOne(@Valid @RequestBody SignUpStepOneRequest request) {
-        if(userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
@@ -77,7 +66,7 @@ public class AuthController {
     public ResponseEntity<?> signUpUserStepTwo(@Valid @RequestBody SignUpStepTwoRequest request) {
         Optional<User> optionalUser = userRepository.findById(request.getId());
 
-        if(!optionalUser.isPresent()) {
+        if (!optionalUser.isPresent()) {
             return new ResponseEntity(new ApiResponse(false, "User not found."),
                     HttpStatus.BAD_REQUEST);
         }
@@ -94,11 +83,23 @@ public class AuthController {
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/users/{email}")
-                .buildAndExpand(result.getEmail()).toUri();
+                .fromCurrentContextPath().path("/users/{id}")
+                .buildAndExpand(result.getId()).toUri();
 
+        jwtSignInUser(user.getEmail(), request.getPassword());
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User fully registered successfully"));
 
+    }
+
+    private JwtAuthenticationResponse jwtSignInUser(String username, String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.generateToken(authentication);
+        return new JwtAuthenticationResponse(jwt);
     }
 }
