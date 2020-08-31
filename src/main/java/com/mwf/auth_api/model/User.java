@@ -28,6 +28,10 @@ public class User extends Timestamps {
     private String email;
 
     @NotBlank
+    @Size(max = 40)
+    private String name;
+
+    @NotBlank
     @Size(min = 8, max = 100)
     private String password;
 
@@ -35,10 +39,13 @@ public class User extends Timestamps {
 
     }
 
-    public User(String email) {
+    public User(String name, String email) {
+        this.name = name;
         this.email = email;
     }
-    public User(String email, String password) {
+
+    public User(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -57,6 +64,14 @@ public class User extends Timestamps {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

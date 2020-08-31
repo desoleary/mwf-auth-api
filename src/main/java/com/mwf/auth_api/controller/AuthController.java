@@ -49,7 +49,7 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        User user = new User(request.getEmail());
+        User user = new User(request.getName(), request.getEmail());
 
         User result = userRepository.save(user);
 
