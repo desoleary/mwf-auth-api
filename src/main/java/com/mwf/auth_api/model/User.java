@@ -27,12 +27,20 @@ public class User extends Timestamps {
     @Email
     private String email;
 
+    @NotBlank
+    @Size(min = 8, max = 100)
+    private String password;
+
     public User() {
 
     }
 
     public User(String email) {
         this.email = email;
+    }
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -49,5 +57,13 @@ public class User extends Timestamps {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
