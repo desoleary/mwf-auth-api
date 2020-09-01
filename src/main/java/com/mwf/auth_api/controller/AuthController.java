@@ -64,7 +64,7 @@ public class AuthController {
 
     @PostMapping("/signup_step_two")
     public ResponseEntity<?> signUpUserStepTwo(@Valid @RequestBody SignUpStepTwoRequest request) {
-        Optional<User> optionalUser = userRepository.findById(request.getId());
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
 
         if (!optionalUser.isPresent()) {
             return new ResponseEntity(new ApiResponse(false, "User not found."),
@@ -83,8 +83,8 @@ public class AuthController {
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/users/{id}")
-                .buildAndExpand(result.getId()).toUri();
+                .fromCurrentContextPath().path("/users/{email}")
+                .buildAndExpand(result.getEmail()).toUri();
 
         jwtSignInUser(user.getEmail(), request.getPassword());
 

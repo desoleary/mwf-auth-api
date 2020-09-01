@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class SignUpStepTwoRequest {
     @NotBlank
-    private Long id;
+    private String email;
 
     @NotBlank
     @Size(min = 8, max = 100)
@@ -15,12 +15,12 @@ public class SignUpStepTwoRequest {
     @Size(min = 8, max = 100)
     private String confirmationPassword;
 
-    public Long getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
