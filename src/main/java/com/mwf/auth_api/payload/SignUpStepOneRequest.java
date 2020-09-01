@@ -14,6 +14,12 @@ public class SignUpStepOneRequest {
     @Email
     private String email;
 
+    public SignUpStepOneRequest() {}
+    public SignUpStepOneRequest(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
     public String getName() {
         return name;
     }
