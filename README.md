@@ -1,4 +1,12 @@
-## Move Work Forward Assignment
+## Authorization API (Built with Java Spring MVC, JWT, Hibernate & PostgreSQL)
+
+#### Installation and running
+
+```bash
+git clone git@github.com:desoleary/mwf-auth-api.git
+cd mwf-auth-api.git
+./mvnw spring-boot:run # builds package and runs application, ensure to update application.properties with your db creds (PostgreSQL)
+```
 
 #### API (Requests)
 
